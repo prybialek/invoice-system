@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -19,9 +20,13 @@ public class InvoiceServiceImp implements InvoiceService {
     }
 
 
-    @Override
     public List<Invoice> findAllInvoices() {
         return invoiceRepo.findAll();
+    }
+
+    @Override
+    public Optional<Invoice> findById(Long id) {
+        return invoiceRepo.findById(id);
     }
 
     @Override
@@ -32,5 +37,10 @@ public class InvoiceServiceImp implements InvoiceService {
     @Override
     public void deleteInvoice(Long id) {
         invoiceRepo.deleteById(id);
+    }
+
+    @Override
+    public void editInvoice(Invoice invoice) {
+
     }
 }
