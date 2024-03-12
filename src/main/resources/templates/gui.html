@@ -28,6 +28,7 @@
             <td th:text="${invoice.name}"></td>
             <td th:text="${invoice.date}"></td>
             <td th:text="${invoice.amount}"></td>
+            <td><a th:href="@{/edit/{id}(id=${invoice.id})}"><button type="button" class="btn btn-primary">Edit</button></a></td>
             <td><a th:href="@{/delete(id=${invoice.id})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
         </tr>
     </tbody>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <title>Edit Invoice</title>
+</head>
+<body>
+<h1>Edit Invoice</h1>
+<form th:action="@{/update/{id}(id=${invoice.id})}" th:object="${invoice}" method="post">
+  <input type="hidden" name="id" th:value="${invoice.id}">
+  <div class="form-group">
+    <label for="name" class="form-label">Name</label>
+    <input type="text" class="form-control" name="name" id="name" th:value="${invoice.name}">
+  </div>
+  <div class="form-group">
+    <label for="date" class="form-label">Date</label>
+    <input type="text" class="form-control" name="date" id="date" th:value="${invoice.date}">
+  </div>
+  <div class="form-group">
+    <label for="amount" class="form-label">Amount</label>
+    <input type="text" class="form-control" name="amount" id="amount" th:value="${invoice.amount}">
+  </div>
+  <a th:href="@{/}"><button type="button" class="btn btn-danger">Go back</button></a>
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+</body>
+</html>

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-public class InvoiceControllerImp implements InvoiceContoller {
+public class InvoiceControllerImp implements InvoiceController {
 
     private final InvoiceService invoiceService;
 
@@ -32,9 +32,30 @@ public class InvoiceControllerImp implements InvoiceContoller {
         return "redirect:/";
     }
 
+
     @GetMapping("/delete")
     public String deleteInvoice(@RequestParam Long id) {
         invoiceService.deleteInvoice(id);
+        return "redirect:/";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editInvoice(@PathVariable Long id, Model model) {
+        Invoice invoice = invoiceService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid invoice id:" + id));
+        model.addAttribute("invoice", invoice);
+        return "edit_invoice";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateInvoice(@PathVariable("id") Long id, Invoice updatedInvoice) {
+        Invoice invoice = invoiceService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid invoice id:" + id));
+        invoice.setName(updatedInvoice.getName());
+        invoice.setDate(updatedInvoice.getDate());
+        invoice.setAmount(updatedInvoice.getAmount());
+
+        invoiceService.saveInvoice(invoice);
         return "redirect:/";
     }
 }
