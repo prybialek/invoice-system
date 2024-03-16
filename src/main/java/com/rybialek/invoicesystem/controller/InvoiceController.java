@@ -2,9 +2,11 @@ package com.rybialek.invoicesystem.controller;
 
 import com.rybialek.invoicesystem.model.Invoice;
 import com.rybialek.invoicesystem.service.InvoiceService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,22 +42,26 @@ public class InvoiceController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editInvoice(@PathVariable Long id, Model model) {
-        Invoice invoice = invoiceService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid invoice id:" + id));
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        Invoice invoice = invoiceService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid invoice Id:" + id));
         model.addAttribute("invoice", invoice);
         return "edit_invoice";
     }
 
     @PostMapping("/update/{id}")
-    public String updateInvoice(@PathVariable("id") Long id, Invoice updatedInvoice) {
-        Invoice invoice = invoiceService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid invoice id:" + id));
-        invoice.setName(updatedInvoice.getName());
-        invoice.setDate(updatedInvoice.getDate());
-        invoice.setAmount(updatedInvoice.getAmount());
+    public String updateInvoice(@PathVariable("id") Long id, @Valid @ModelAttribute("invoice") Invoice invoice, BindingResult result) {
 
-        invoiceService.saveInvoice(invoice);
+        if (result.hasErrors()) {
+            return "edit_invoice";
+        }
+
+        invoiceService.findById(id).ifPresent(i -> {
+            i.setName(invoice.getName());
+            i.setDate(invoice.getDate());
+            i.setAmount(invoice.getAmount());
+            invoiceService.saveInvoice(i);
+        });
+
         return "redirect:/";
     }
 }
