@@ -14,17 +14,17 @@
     <div>
         <label for="name">Name:</label>
         <input type="text" id="name" th:field="*{name}">
-        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
     </div>
     <div>
         <label for="date">Date:</label>
         <input type="date" id="date" th:field="*{date}">
-        <span th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span>
+        <span class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span>
     </div>
     <div>
         <label for="amount">Amount:</label>
         <input type="number" id="amount" th:field="*{amount}">
-        <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+        <span class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
     </div>
     <a th:href="@{/}"><button type="button" class="btn btn-danger">Go back</button></a>
     <button type="submit">Update</button>

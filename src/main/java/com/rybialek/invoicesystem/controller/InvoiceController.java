@@ -43,24 +43,28 @@ public class InvoiceController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
-        Invoice invoice = invoiceService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid invoice Id:" + id));
-        model.addAttribute("invoice", invoice);
-        return "edit_invoice";
+        invoiceService.findById(id)
+                .ifPresentOrElse(i -> model.addAttribute("invoice", i),
+                        () -> {
+                            throw new IllegalArgumentException("Invalid invoice Id:" + id);
+                        });
+        return "edit-invoice";
     }
 
     @PostMapping("/update/{id}")
     public String updateInvoice(@PathVariable("id") Long id, @Valid @ModelAttribute("invoice") Invoice invoice, BindingResult result) {
 
-        if (result.hasErrors()) {
-            return "edit_invoice";
-        }
+        if (result.hasErrors()) return "edit-invoice";
 
-        invoiceService.findById(id).ifPresent(i -> {
-            i.setName(invoice.getName());
-            i.setDate(invoice.getDate());
-            i.setAmount(invoice.getAmount());
-            invoiceService.saveInvoice(i);
-        });
+        invoiceService.findById(id)
+                .ifPresentOrElse(i -> {
+                    i.setName(invoice.getName());
+                    i.setDate(invoice.getDate());
+                    i.setAmount(invoice.getAmount());
+                    invoiceService.saveInvoice(i);
+                }, () -> {
+                    throw new IllegalArgumentException("Invalid invoice Id:" + id);
+                });
 
         return "redirect:/";
     }
