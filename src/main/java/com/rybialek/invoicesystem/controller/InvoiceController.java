@@ -1,5 +1,6 @@
 package com.rybialek.invoicesystem.controller;
 
+import com.rybialek.invoicesystem.aop.AdditionalLogging;
 import com.rybialek.invoicesystem.model.Invoice;
 import com.rybialek.invoicesystem.service.InvoiceService;
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ public class InvoiceController {
     }
 
     @PostMapping("/save")
+    @AdditionalLogging
     public String saveInvoice(@ModelAttribute Invoice invoice) {
         invoiceService.saveInvoice(invoice);
         return "redirect:/";
