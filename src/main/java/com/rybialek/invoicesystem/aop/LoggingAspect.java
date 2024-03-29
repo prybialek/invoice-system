@@ -16,7 +16,7 @@ public class LoggingAspect {
 
     @Before("@annotation(AdditionalLogging) && args(invoice)")
     public void beforeSave(Invoice invoice) {
-        System.out.println("Invoice to save: {" + invoice.getName() + ", " + invoice.getDate() + ", " +invoice.getAmount() + "}");
+        System.out.println("Invoice to save: {" + invoice.getName() + ", " + invoice.getDate() + ", " + invoice.getAmount() + "}");
     }
 
     @After("@annotation(AdditionalLogging)")

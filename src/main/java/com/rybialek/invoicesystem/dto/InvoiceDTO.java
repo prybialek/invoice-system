@@ -1,26 +1,31 @@
-package com.rybialek.invoicesystem.model;
+package com.rybialek.invoicesystem.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
-public class Invoice {
+public class InvoiceDTO {
 
-    @Id
-    @SequenceGenerator(name = "invoice_seq", sequenceName = "invoice_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_seq")
     private Long id;
-
-    @Column
+    @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     private String name;
-
-    @Column
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-
-    @Column
     private BigDecimal amount;
+
+    public InvoiceDTO(Long id, String name, LocalDate date, BigDecimal amount) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.amount = amount;
+    }
+
+    public InvoiceDTO() {
+    }
 
     public Long getId() {
         return id;

@@ -1,6 +1,8 @@
 package com.rybialek.invoicesystem.service;
 
 import com.rybialek.invoicesystem.dao.InvoiceRepo;
+import com.rybialek.invoicesystem.dto.InvoiceDTO;
+import com.rybialek.invoicesystem.mapper.InvoiceMapper;
 import com.rybialek.invoicesystem.model.Invoice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,15 +15,18 @@ import java.util.Optional;
 public class InvoiceServiceImp implements InvoiceService {
 
     private final InvoiceRepo invoiceRepo;
+    private final InvoiceMapper invoiceMapper;
+
 
     @Autowired
-    public InvoiceServiceImp(InvoiceRepo invoiceRepo) {
+    public InvoiceServiceImp(InvoiceRepo invoiceRepo, InvoiceMapper invoiceMapper) {
         this.invoiceRepo = invoiceRepo;
+        this.invoiceMapper = invoiceMapper;
     }
 
-
-    public List<Invoice> findAllInvoices() {
-        return invoiceRepo.findAll();
+    @Override
+    public List<InvoiceDTO> findAllInvoices() {
+        return invoiceMapper.toDTOList(invoiceRepo.findAll());
     }
 
     @Override
@@ -30,8 +35,8 @@ public class InvoiceServiceImp implements InvoiceService {
     }
 
     @Override
-    public void saveInvoice(Invoice invoice) {
-        invoiceRepo.save(invoice);
+    public void saveInvoice(InvoiceDTO invoiceDTO) {
+        invoiceRepo.save(invoiceMapper.toEntity(invoiceDTO));
     }
 
     @Override
@@ -39,8 +44,4 @@ public class InvoiceServiceImp implements InvoiceService {
         invoiceRepo.deleteById(id);
     }
 
-    @Override
-    public void editInvoice(Invoice invoice) {
-
-    }
 }

@@ -9,8 +9,8 @@
 </head>
 <body>
 <h1>Edit Invoice</h1>
-<form th:action="@{/update/{id}(id=${id})}" th:object="${invoice}" method="post">
-    <input type="hidden" id="id" th:value="${id}">
+<form th:action="@{/update/{id}(id=${id})}" th:object="${invoiceDTO}" method="post">
+    <input type="hidden" id="id" th:value="${invoiceDTO.id}">
     <div>
         <label for="name">Name:</label>
         <input type="text" id="name" th:field="*{name}">
@@ -18,7 +18,7 @@
     </div>
     <div>
         <label for="date">Date:</label>
-        <input type="date" id="date" th:field="*{date}">
+        <input type="date" id="date" th:field="*{date}" th:value="${invoiceDTO.date}">
         <span class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span>
     </div>
     <div>

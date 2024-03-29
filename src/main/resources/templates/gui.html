@@ -24,18 +24,18 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="invoice:${invoices}">
-        <td th:text="${invoice.id}"></td>
-        <td th:text="${invoice.name}"></td>
-        <td th:text="${invoice.date}"></td>
-        <td th:text="${invoice.amount}"></td>
+    <tr th:each="invoiceDTO:${invoicesDTO}">
+        <td th:text="${invoiceDTO.id}"></td>
+        <td th:text="${invoiceDTO.name}"></td>
+        <td th:text="${invoiceDTO.date}"></td>
+        <td th:text="${invoiceDTO.amount}"></td>
         <td>
             <div class="btn-group">
-                <a th:href="@{/edit/{id}(id=${invoice.id})}">
+                <a th:href="@{/edit/{id}(id=${invoiceDTO.id})}">
                     <button type="button" class="btn btn-primary">Edit</button>
                 </a>
                 <span style="margin-left: 5px;"></span>
-                <a th:href="@{/delete(id=${invoice.id})}">
+                <a th:href="@{/delete(id=${invoiceDTO.id})}">
                     <button type="button" class="btn btn-danger">Delete</button>
                 </a>
             </div>

@@ -1,7 +1,7 @@
 package com.rybialek.invoicesystem.controller;
 
 import com.rybialek.invoicesystem.aop.AdditionalLogging;
-import com.rybialek.invoicesystem.model.Invoice;
+import com.rybialek.invoicesystem.dto.InvoiceDTO;
 import com.rybialek.invoicesystem.service.InvoiceService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import java.util.List;
 @Controller
 public class InvoiceController {
 
+    public static final String REDIRECT_TO_INVOICES = "redirect:/invoices";
     private final InvoiceService invoiceService;
 
     @Autowired
@@ -22,31 +23,34 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    @GetMapping
+    @GetMapping("/")
+    public String home() {
+        return REDIRECT_TO_INVOICES;
+    }
+    @GetMapping("/invoices")
     public String findAllInvoices(Model model) {
-        List<Invoice> invoices = invoiceService.findAllInvoices();
-        model.addAttribute("invoices", invoices);
+        List<InvoiceDTO> invoicesDTO = invoiceService.findAllInvoices();
+        model.addAttribute("invoicesDTO", invoicesDTO);
         return "gui";
     }
 
     @PostMapping("/save")
     @AdditionalLogging
-    public String saveInvoice(@ModelAttribute Invoice invoice) {
-        invoiceService.saveInvoice(invoice);
-        return "redirect:/";
+    public String saveInvoice(@ModelAttribute InvoiceDTO invoiceDTO) {
+        invoiceService.saveInvoice(invoiceDTO);
+        return REDIRECT_TO_INVOICES;
     }
-
 
     @GetMapping("/delete")
     public String deleteInvoice(@RequestParam Long id) {
         invoiceService.deleteInvoice(id);
-        return "redirect:/";
+        return REDIRECT_TO_INVOICES;
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
         invoiceService.findById(id)
-                .ifPresentOrElse(i -> model.addAttribute("invoice", i),
+                .ifPresentOrElse(i -> model.addAttribute("invoiceDTO", i),
                         () -> {
                             throw new IllegalArgumentException("Invalid invoice Id:" + id);
                         });
@@ -54,20 +58,10 @@ public class InvoiceController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateInvoice(@PathVariable("id") Long id, @Valid @ModelAttribute("invoice") Invoice invoice, BindingResult result) {
-
+    public String updateInvoice(@PathVariable("id") Long id, @Valid @ModelAttribute("invoiceDTO") InvoiceDTO invoiceDTO, BindingResult result) {
         if (result.hasErrors()) return "edit-invoice";
+        invoiceService.saveInvoice(invoiceDTO);
 
-        invoiceService.findById(id)
-                .ifPresentOrElse(i -> {
-                    i.setName(invoice.getName());
-                    i.setDate(invoice.getDate());
-                    i.setAmount(invoice.getAmount());
-                    invoiceService.saveInvoice(i);
-                }, () -> {
-                    throw new IllegalArgumentException("Invalid invoice Id:" + id);
-                });
-
-        return "redirect:/";
+        return REDIRECT_TO_INVOICES;
     }
 }
