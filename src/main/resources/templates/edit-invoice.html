@@ -18,12 +18,11 @@
     </div>
     <div>
         <label for="date">Date:</label>
-        <input type="date" id="date" th:field="*{date}" th:value="${invoiceDTO.date}">
-        <span class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></span>
+        <input type="text" id="date" th:field="*{date}" readonly>
     </div>
     <div>
         <label for="amount">Amount:</label>
-        <input type="number" id="amount" th:field="*{amount}">
+        <input type="text" id="amount" th:field="*{amount}">
         <span class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
     </div>
     <a th:href="@{/}"><button type="button" class="btn btn-danger">Go back</button></a>
